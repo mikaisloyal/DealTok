@@ -12,11 +12,11 @@
 integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
 crossorigin=""/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <title>Browser</title>
 </head>
 
 <body>
-
   <!-- Code for the pop up  -->
   <div id= "dealModal" class="dealDetails">
     <span class="closeModal" onclick="closeDealModal()">×</span>
@@ -37,11 +37,13 @@ crossorigin=""/>
   <div id = "mapContainer">
     <h1 id = "mapContainerHeader">DealTok</h1>
 
-
-
     <div id="map">
       <div id="sideMenu" class="collapsed">
       <button id="toggle">ⓘ</button>
+
+      <div id="searchContainer" class="selector">
+        <div id="geocoderInput"></div>
+    </div>
 
     <div id="chatbot" class="selector">
         <span class="label">AI Chatbot</span>
@@ -103,8 +105,9 @@ crossorigin=""/>
           </div>
 
           <div class="durationType">
-              <input type="checkbox" id="checkAcc"> 
-              Is this a "New Account" sign-up deal?
+            Is this a "New Account" sign-up deal? <br>
+            Check box if yes.
+            <input type="checkbox" id="checkAcc"> 
         </div>
 
         <div id="newAcc" style="display: none;">
@@ -120,7 +123,7 @@ crossorigin=""/>
         </div>
         </div>
           <div class = "insideTitle">Click the map to set the location!</div>
-          <button id = "submitReport" onclick="submitUserDeal(event)">Submit for Review</button>
+          <button id = "submitReport" onclick="submitUserDeal(event)" disabled>Submit for Review</button>
         </div>
     </div>
 </div>
@@ -132,6 +135,7 @@ crossorigin=""/>
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin="">
     </script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
