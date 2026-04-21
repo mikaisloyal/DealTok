@@ -90,6 +90,33 @@ body{
     padding: 0.25vh 0;
     cursor: pointer;
 }
+/* search bar stuff */
+#searchContainer {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    cursor: default;
+    background-color: none;
+}
+#searchContainer .leaflet-control-geocoder {
+    width: 100%;
+    margin: 0;
+}
+
+#searchContainer .leaflet-control-geocoder-form {
+    margin: 0;
+    padding: 0;
+}
+#searchContainer .leaflet-control-geocoder input {
+    display: block; 
+    padding: 10px;
+    font-size: 1vw;
+    color: #8CC084;
+    padding: .5vw;
+}
+
+.leaflet-control-search {
+   border: none;
+}
 /* issue is that the filter and chatbot thing opens by stretching the "buttons" 
 so i need to check that they're not active   */
 #filters:hover, #chatbot:hover, #report:hover{
@@ -111,6 +138,30 @@ so i need to check that they're not active   */
 #report{
     margin-top: 2vh;
     &.selector.active {margin-top: 0;}
+}
+
+input[type=text] 
+{ 
+    outline: 2px solid #8CC084;
+    border-radius: 20px;
+    padding: .25vw;
+}
+
+input[type="checkbox"]:hover {
+    outline: 2px solid #8CC084;
+}
+
+#category{
+    outline: 2px solid #8CC084;
+    margin-bottom:.5vw;
+    border-radius: 20px;
+    padding: .25vw;
+}
+#accDuration{
+    outline: 2px solid #8CC084;
+    border-radius: 20px; 
+    margin-left: 1vw;
+    padding: .25vw;
 }
 
 /* hide inside page when not opened yet */
@@ -174,6 +225,15 @@ so i need to check that they're not active   */
     /* border-color: white; */
     border: dashed #8CC084;
 }
+#submitReport:hover{
+    background-color: #8CC084;
+    border: dashed #C1D7AE;
+}
+#submitReport:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 /*hide the labels when its active*/
 .selector.active .label {
     display: none;
@@ -183,6 +243,20 @@ so i need to check that they're not active   */
     flex-direction: column;
     gap: 10px;
     padding: 5px 0;
+    font-size: .8vw;
+    padding-left: 1vw;
+}
+.durationType{
+    border-top: 2px dashed #8CC084;
+    padding: 1vw 1vw 0vw 1vw;
+}
+
+#checkAcc{
+     transform: scale(1.33);
+}
+
+#Calendar{
+    padding-left: 1vw;
 }
 #toggle{
     background-color: white;
@@ -212,7 +286,7 @@ so i need to check that they're not active   */
 
 .insideTitle{
     margin-top: 0;
-    font-size: 1.4vw;
+    font-size: 1.15vw;
     border-bottom: 2px dashed #8CC084;
     padding-bottom: 2%;
     margin-bottom: 3%;
@@ -295,6 +369,7 @@ so i need to check that they're not active   */
 .leaflet-marker-icon {
     transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease;
 }
+
 /* mediaquerystuff if i get to it */
 @media only screen and (max-width: 850px){
     #sideMenu{
