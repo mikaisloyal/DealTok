@@ -1,145 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="referrer" content="no-referrer-when-downgrade">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="FoodMap.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double&family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Coral+Pixels&family=Doto:wght@100..900&family=Monoton&family=Space+Grotesk:wght@300..700&family=Stint+Ultra+Expanded&family=VT323&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-crossorigin=""/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-  <title>Browser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DealTok | Student Resources</title>
+    <link rel="stylesheet" href="FoodMap.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Monoton&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-
 <body>
-  <!-- Code for the pop up  -->
-  <div id= "dealModal" class="dealDetails">
-    <span class="closeModal" onclick="closeDealModal()">×</span>
-    <div class="modalHeader" id ="modalTitle"></div>
-    
-    <div class="modalBody">
-        <ul>
-            <li>Duration:<span id="modalDuration"></span></li>
-            <li>Applicable Item(s):<span id="modalItems"></span></li>
-        </ul>
-        <!-- this thing below opens the link on a new tab -->
-        <a href = "#" target = "_blank" class="externalLink" id="modalExternalLink">
-            Click here to go to the company's Page for more details about the app and the deal.
-        </a>
+
+<header class="main-header">
+    <div class="logo-area">
+        <h1 class="app-name">DEALTOK</h1>
+    </div>
+    <nav class="category-bar">
+        <button class="nav-item active" onclick="handleTopNav('all')">All</button>
+        <button class="nav-item" onclick="handleTopNav('food')">Food & Drink</button>
+        <button class="nav-item" onclick="handleTopNav('beauty')">Beauty</button>
+        <button class="nav-item" onclick="handleTopNav('fashion')">Fashion</button>
+        <button class="nav-item" onclick="handleTopNav('study')">Study</button>
+        <button class="nav-item" onclick="handleTopNav('tech')">Tech</button>
+        <button class="nav-item" onclick="handleTopNav('events')">Events</button>
+    </nav>
+</header>
+
+<div id="sideFilterMenu" class="side-menu">
+    <button class="close-btn" onclick="closeSideMenu()">×</button>
+    <h3 id="sideMenuTitle">Filters</h3>
+    <hr>
+    <div id="filterOptionsList"></div>
+</div>
+
+<div id="map"></div>
+
+<button id="aiToggle" onclick="toggleChat()">✨ Ask DealBot</button>
+
+<div id="chatDrawer" class="drawer">
+    <div class="drawer-header">
+        <h3>DealBot AI</h3>
+        <button onclick="toggleChat()">×</button>
+    </div>
+    <div id="chatDisplay"></div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Find me free food...">
+        <button onclick="askGemini()">Send</button>
     </div>
 </div>
 
-  <div id = "mapContainer">
-    <h1 id = "mapContainerHeader">DealTok</h1>
-
-    <div id="map">
-      <div id="sideMenu" class="collapsed">
-      <button id="toggle">ⓘ</button>
-
-      <div id="searchContainer" class="selector">
-        <div id="geocoderInput"></div>
-    </div>
-
-    <div id="chatbot" class="selector">
-        <span class="label">AI Chatbot</span>
-        <div id="messages" class="insidePage">
-            Sweet potatoes sweet potatoes sweet potatoes im sooooo sleepy
-        </div>
-    </div>
-
-    <div id="filters" class="selector">
-        <span class="label">Filters</span>
-        <div id="checklist" class="insidePage">
-            <div class = "insideTitle">Filters</div>
-            <label class = "insideLabel">
-              <input type="checkbox" id="foodCheck" checked> Food 
-            </label>
-            <label class = "insideLabel child">
-              <input type="checkbox" id="veggieCheck"> Vegetarian  
-            </label>
-            <label class = "insideLabel child">
-              <input type="checkbox" id="veganCheck"> Vegan  
-            </label>
-             <label class = "insideLabel child">
-              <input type="checkbox" id="halalCheck"> Halal  
-            </label> 
-            <label class = "insideLabel child">
-              <input type="checkbox" id="kosherCheck"> Kosher  
-            </label>
-            <label class = "insideLabel">
-              <input type="checkbox" id="clothCheck"> Fashion 
-            </label>
-            <label class = "insideLabel">
-              <input type="checkbox" id="soapCheck"> Hygiene 
-            </label>
-        </div>
-    </div>
-
-    <div id = "report" class = "selector">
-      <span class="label">Share a deal!</span>
-        <div class = "insidePage" id = "reportPage"> 
-          <div class = "insideTitle">Share a deal</div>
-          <input type="text" id="reportTitle" placeholder="Store Name (ex. Pizza Place)">
-          <input type="text" id="reportItems" placeholder="What is the deal?">
-          <input type="text" id="reportUrl" placeholder="Link to deal (optional)">
-
-          <select id="category" name="Category">
-            <option value="" disabled selected>What's the category of the deal?</option>
-            <option value="food">food</option>
-            <option value="clothes">clothes</option>
-            <option value="hygiene">hygiene</option>
-          </select>
-
-          <div class = "moveLeft"> 
-          <div class="tagCheck">Tags (Check all that apply):</div>
-          <div class="tag">
-            <div><input type="checkbox" name="dealTag" value="veggieCheck"> Vegetarian </div>
-            <div><input type="checkbox" name="dealTag" value="veganCheck"> Vegan </div>
-            <div><input type="checkbox" name="dealTag" value="halalCheck"> Halal </div>
-            <div><input type="checkbox" name="dealTag" value="kosherCheck"> Kosher </div>
-          </div>
-
-          <div class="durationType">
-            Is this a "New Account" sign-up deal? <br>
-            Check box if yes.
-            <input type="checkbox" id="checkAcc"> 
-        </div>
-
-        <div id="newAcc" style="display: none;">
-            <select id="accDuration">
-                <option value="14">2 weeks after signup</option>
-                <option value="30">1 month after signup</option>
-                <option value="60">2 months after signup</option>
-            </select>
-        </div>
-
-        <div id="Calendar">
-            <input type="text" id="dateRange" placeholder="Select Deal Dates (Calendar)">
-        </div>
-        </div>
-          <div class = "insideTitle">Click the map to set the location!</div>
-          <button id = "submitReport" onclick="submitUserDeal(event)" disabled>Submit for Review</button>
-        </div>
-    </div>
-</div>
-  </div>
-
-  </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin="">
-    </script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="FoodMap.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="FoodMap.js"></script>
 </body>
-
 </html>
