@@ -46,11 +46,17 @@ crossorigin=""/>
     </div>
 
     <div id="chatbot" class="selector">
-        <span class="label">AI Chatbot</span>
+    <span class="label">DealTok AI Assistant</span>
+    <div id="chatContainer">
         <div id="messages" class="insidePage">
-            Sweet potatoes sweet potatoes sweet potatoes im sooooo sleepy
+            <div class="bot-msg">Hey there! Need help finding deals in NYC?</div>
+        </div>
+        <div id="inputArea">
+            <input type="text" id="userInput" placeholder="Ask about a deal...">
+            <button id="sendBtn">Send</button>
         </div>
     </div>
+</div>
 
     <div id="filters" class="selector">
         <span class="label">Filters</span>
@@ -139,7 +145,26 @@ crossorigin=""/>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "@google/genai": "https://esm.run/@google/genai"
+      }
+    }
+    </script>
+
+    <script type="module">
+    import { GoogleGenAI } from "https://esm.run/@google/genai";
+    const KEY = "AIzaSyB51x0Q7gVnPVmelGvWqz7lko5Hmotm7xU";
+    
+    // This 'new' creates the instance that HAS the getGenerativeModel function
+    window.genAIInstance = new GoogleGenAI({ apiKey: KEY });
+    
+    console.log("Bridge: Instance created and attached to window.");
+</script>
+
     <script src="FoodMap.js"></script>
+        
 </body>
 
 </html>

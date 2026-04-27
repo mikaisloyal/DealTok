@@ -563,3 +563,96 @@ const openDealModal = (data) => {
 const closeDealModal =() => {
     modal.style.display = "none";
 }
+
+// ==========================================
+// 8. AI CHATBOT LOGIC (Gemini Integration)
+// ==========================================
+
+// 1. Point to the instance created in the HTML bridge
+let genAI;
+
+function checkBridge() {
+    if (window.genAIInstance) {
+        genAI = window.genAIInstance;
+        console.log("FoodMap.js: AI Instance linked successfully!");
+    } else {
+        setTimeout(checkBridge, 100);
+    }
+}
+checkBridge();
+
+// 2. The Chat Function
+async function askChatbot(userPrompt) {
+    const ai = window.genAIInstance || genAI;
+    if (!ai) return "I'm still waking up...";
+
+    try {
+        // Fix 1: Use the full path for the model
+        const result = await ai.models.generateContent({
+    // Use the exact string from your console log
+    model: "models/gemini-2.5-flash", 
+    contents: [{ 
+        role: "user", 
+        parts: [{ text: userPrompt }] 
+    }]
+});
+
+        // Fix 2: Navigate the specific response tree for this SDK version
+        // Based on your previous logs, this is the most likely path:
+        if (result.candidates && result.candidates[0].content) {
+            return result.candidates[0].content.parts[0].text;
+        }
+        
+        return "I found an answer, but I can't read it. Check the console!";
+
+    } catch (error) {
+        console.error("Gemini Error:", error);
+        return "Connection failed. Make sure you're using the right model path!";
+    }
+}
+
+// 3. The UI Logic (Ensure messageArea is defined)
+// Add these at the top of your AI section in FoodMap.js
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const messageArea = document.getElementById('messages');
+
+// Function to add a message bubble to the UI
+function appendMessage(role, text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = role === 'user' ? 'user-msg' : 'bot-msg';
+    msgDiv.innerText = text;
+    messageArea.appendChild(msgDiv);
+    
+    // Auto-scroll to the bottom
+    messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+async function handleChat() {
+    const prompt = userInput.value.trim();
+    if (!prompt) return;
+
+    // 1. Show user message
+    appendMessage('user', prompt);
+    userInput.value = ''; // Clear input
+
+    // 2. Show loading state
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'bot-msg';
+    loadingDiv.innerText = "Thinking...";
+    messageArea.appendChild(loadingDiv);
+
+    // 3. Get AI Response
+    const aiResponse = await askChatbot(prompt);
+    
+    // 4. Replace loading text with real response
+    loadingDiv.innerText = aiResponse;
+}
+
+// Listen for the Send button click
+sendBtn.addEventListener('click', handleChat);
+
+// Allow pressing "Enter" to send
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleChat();
+});

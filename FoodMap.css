@@ -1,19 +1,19 @@
-body{
+/* --- GLOBAL STYLES --- */
+body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden; 
-
     background-color: #C1D7AE;
+    font-family: sans-serif;
 }
 
-#mapContainer{
+#mapContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     height: 100vh;
     width: 100vw;
     box-sizing: border-box;
@@ -26,376 +26,258 @@ body{
     border-radius: 20px; 
     border: 5px dashed #8CC084;
     box-sizing: border-box; 
+    z-index: 1;
 }
 
-#mapContainerHeader{
+#mapContainerHeader {
     background-color: #C1D7AE;
     font-family: "Monoton", sans-serif;
     font-weight: 400;
-    font-style: normal;
     color: white;
     font-size: 5vh;
-     text-shadow: 
-        0 0 5px #8CC084, 
-        0 0 5px #8CC084, 
-        0 0 5px #8CC084, 
-        0 0 5px #8CC084;
-
+    text-shadow: 0 0 5px #8CC084, 0 0 5px #8CC084, 0 0 5px #8CC084, 0 0 5px #8CC084;
     border-radius: 25px; 
     border: 5px dashed #8CC084;
     padding: 0 0.8vw;
     top: 20px;
-
     position: absolute;
     z-index: 999;
     pointer-events: none; 
 }
 
-#sideMenu{
-    width: 25%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, .7);
-    position: relative;
-    z-index: 999;
-
+/* --- SIDEBAR LOGIC (THE ZOOM-CONTROL CLEARANCE) --- */
+#sideMenu {
     display: flex;
-    align-items: center;
     flex-direction: column;
-    border-radius: 0 20px 20px 0;
-
-    transition: width 0.3s ease;
-    cursor: default;
+    /* Positions the top of the menu exactly below the Leaflet +/- buttons */
+    top: 90px; 
+    left: 0;
+    height: calc(100% - 110px); 
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none; /* Allows map interaction through empty sidebar space */
+    width: fit-content;
+    overflow: visible;
+    transition: all 0.3s ease-in-out;
 }
 
 #sideMenu.collapsed {
-    width: 0; 
-    border: none;
-    .selector{
-        display: none;
-    }
+    width: 0;
 }
 
-.selector{
+#sideMenu.collapsed .selector {
+    display: none;
+}
+
+/* --- SELECTORS (BUTTONS) --- */
+.selector {
     background-color: white;
     color: #8CC084;
-    font-size: 3vh;
+    font-size: 1.1rem;
     border-radius: 25px; 
     border: 2px solid white; 
-
-    position: relative;
-    top:2vw;
-    width: 15vw;       
+    margin: 10px 20px;
+    width: 18vw;       
     text-align: center;  
-    word-break: break-word;
-    padding: 0.25vh 0;
-    cursor: pointer;
-}
-/* search bar stuff */
-#searchContainer {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-    cursor: default;
-    background-color: none;
-}
-#searchContainer .leaflet-control-geocoder {
-    width: 100%;
-    margin: 0;
-}
-
-#searchContainer .leaflet-control-geocoder-form {
-    margin: 0;
-    padding: 0;
-}
-#searchContainer .leaflet-control-geocoder input {
-    display: block; 
     padding: 10px;
-    font-size: 1vw;
-    color: #8CC084;
-    padding: .5vw;
-}
-
-.leaflet-control-search {
-   border: none;
-}
-/* issue is that the filter and chatbot thing opens by stretching the "buttons" 
-so i need to check that they're not active   */
-#filters:hover, #chatbot:hover, #report:hover{
-    &.selector:not(.active){
-        background-color: #8CC084;
-    color: white;
-    border: .125vw solid white; 
-     box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 29px 0px;
-     transition-duration: 0.4s;
-    }
-}
-
-#filters{
-    margin-top: 2vh;
-    /* when active the margin top from before messes with it so  */
-    &.selector.active {margin-top: 0;}
-}
-
-#report{
-    margin-top: 2vh;
-    &.selector.active {margin-top: 0;}
-}
-
-input[type=text] 
-{ 
-    outline: 2px solid #8CC084;
-    border-radius: 20px;
-    padding: .25vw;
-}
-
-input[type="checkbox"]:hover {
-    outline: 2px solid #8CC084;
-}
-
-#category{
-    outline: 2px solid #8CC084;
-    margin-bottom:.5vw;
-    border-radius: 20px;
-    padding: .25vw;
-}
-#accDuration{
-    outline: 2px solid #8CC084;
-    border-radius: 20px; 
-    margin-left: 1vw;
-    padding: .25vw;
-}
-
-/* hide inside page when not opened yet */
-.insidePage {
-    display: none; 
-    flex-direction: column; 
-    gap: 15px;              
-    padding: 20px;
-}
-
-/* Hide inactive selector  */
-.hidden { 
-    display: none; 
-}
-
-/* keep back button hidden as default */
-.backBtn {
-    display: none;
-    margin-bottom: 10px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    pointer-events: auto; /* Re-enables clicking on buttons */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
-/* when opened make selector fill sidemenu */
+.selector:hover:not(.active) {
+    background-color: #8CC084;
+    color: white;
+    border: 2px solid white; 
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 29px 0px;
+}
+
+/* --- ACTIVE STATE (NO MORE FULL-SCREEN) --- */
 .selector.active {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 25px; 
+    position: relative;
+    width: 22vw; 
+    height: auto;
+    max-height: 80vh; 
+    margin: 0 20px;
     background: white;
     cursor: default;
     padding: 20px;
-    box-sizing: border-box;
-}
-
-/*show inside page when active*/
-.selector.active .insidePage {
-    display: flex;
-    flex-direction: column; 
-    
-    gap: 10px;
-}
-.moveLeft{
-    align-items: flex-start; 
-    text-align: left;
-}
-.durationType{
-    font-size: .9vw;
-}
-/*also show backbutton when active */
-.selector.active .backBtn {
-    display: block;
-}
-#submitReport{
-    background-color: #C1D7AE;
-    border-radius: 20px;
-    padding: .75vw;
-    font-size: .8vw;
-    color: white;
-    /* border-color: white; */
-    border: dashed #8CC084;
-}
-#submitReport:hover{
-    background-color: #8CC084;
-    border: dashed #C1D7AE;
-}
-#submitReport:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-/*hide the labels when its active*/
-.selector.active .label {
-    display: none;
-}
-.tag{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 5px 0;
-    font-size: .8vw;
-    padding-left: 1vw;
-}
-.durationType{
-    border-top: 2px dashed #8CC084;
-    padding: 1vw 1vw 0vw 1vw;
+    overflow: hidden;
+    z-index: 1001;
 }
 
-#checkAcc{
-     transform: scale(1.33);
-}
-
-#Calendar{
-    padding-left: 1vw;
-}
-#toggle{
-    background-color: white;
-    border: 2px solid white; 
-    border-radius: 15px;
-    color: #8CC084;
-    font-size: 3vw;
-
-    position: absolute;
-    left: 100%;
-    top: 80px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-#toggle.opened{
-    top: 10px;
-}
-
-#toggle:hover{
-    content: "";
-    background: #8CC084;
-    color: white;
-    
-    transition: all 0.5s
-}
-
-.insideTitle{
-    margin-top: 0;
-    font-size: 1.15vw;
-    border-bottom: 2px dashed #8CC084;
-    padding-bottom: 2%;
-    margin-bottom: 3%;
-}
-
-.insideLabel{
-    font-size: .8vw;
+/* --- CHATBOT UI --- */
+#messages {
+    flex: 1;
+    overflow-y: auto; /* Adds scrollbar for long AI responses */
+    max-height: 35vh; 
+    padding: 10px;
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+    border: 2px dashed #8CC084;
+    border-radius: 15px;
+    margin: 10px 0;
+    word-wrap: break-word;
+}
+
+.bot-msg, .user-msg {
+    max-width: 90%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    line-height: 1.4;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background-color: #8CC084;
+    color: white;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    color: #444;
+}
+
+#inputArea {
+    display: flex;
     gap: 5px;
+    padding-top: 10px;
+    flex-shrink: 0;
+}
+
+#userInput {
+    flex: 1;
+    border-radius: 15px;
+    border: 2px solid #8CC084;
+    padding: 8px;
+    font-size: 0.8rem;
+}
+
+#sendBtn {
+    background-color: #8CC084;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 12px;
     cursor: pointer;
 }
 
-.insideLabel.child{
-   margin-left: 30px;
+/* --- SEARCH BAR --- */
+#searchContainer {
+    pointer-events: auto;
+    margin: 10px 20px 20px 20px;
 }
 
-/* From here is for the pop ups  */
-.mapPopup{
-    text-align: center;
-    font-family: "Cascadia Code", sans-serif;
-   box-sizing: border-box;
+#searchContainer .leaflet-control-geocoder input {
+    width: 18vw;
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #8CC084;
+    border-radius: 15px;
+    border: 2px solid white;
 }
 
-.mapPopup h3{
-    text-transform: uppercase;
-    text-decoration: underline;
-    text-decoration-thickness: .25vw;
-    font-size: 1vw;
-}
-
-/* come back here for color  */
-.mapPopup a.detailsTrigger{
-    color: rgb(23, 161, 58);
-    font-size: .5vw;
-    text-decoration: underline;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.dealDetails{
+/* --- INFO MODAL (DEAL DETAILS) --- */
+.dealDetails {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /* Centers the modal perfectly */
     width: 90%;
-    max-width: 30vw;
-    border-radius: 20px;
-    z-index: 10000;
-    padding: 2vw;
-
-    font-family: "Cascadia Code", sans-serif;
+    max-width: 400px;
     background-color: white;
     border: 3px dashed #8CC084;
+    border-radius: 20px;
+    padding: 20px;
+    z-index: 10000;
     box-shadow: rgba(0, 0, 0, 0.5) 0px 7px 29px 0px;
-
     display: none; 
-    overflow: hidden; 
 }
 
 .dealDetails .closeModal {
     position: absolute;
-    top: 1vw;
-    right: 1.5vw;
-    color: rgb(19, 180, 19);
-    font-size: 1.5vw;
+    top: 10px;
+    right: 15px;
+    color: #8CC084;
+    font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
-    line-height: 1;
 }
 
-.dealDetails .modalBody a.externalLink{
+/* --- TOGGLE BUTTON --- */
+#toggle {
+    background-color: white;
+    border: 2px solid white; 
+    border-radius: 15px;
+    color: #8CC084;
+    font-size: 2rem;
+    position: absolute;
+    left: 100%; /* Sits to the right of the sidebar */
+    top: 0;
+    margin-left: 10px;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 1002;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+#toggle:hover {
+    background: #8CC084;
+    color: white;
+}
+
+/* --- INTERNAL UI ELEMENTS --- */
+.insidePage {
+    display: none; 
+    flex-direction: column; 
+    gap: 15px;
+}
+
+.selector.active .insidePage {
+    display: flex;
+}
+
+.backBtn {
+    display: none;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #8CC084;
+}
+
+.selector.active .backBtn {
     display: block;
-    text-align: center;
-    color: rgb(23, 161, 58);
-    text-decoration: underline;
-    font-weight: bold;
-    font-size: .8vw;
-}
-.leaflet-marker-icon {
-    transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease;
 }
 
-/* mediaquerystuff if i get to it */
-@media only screen and (max-width: 850px){
-    #sideMenu{
-        width: 80%;
-    }
-    #toggle{
-        font-size: 12vw;
-        top: 95px;
-    }
-    .selector{
-        width: 50vw;
-    }
-    .insideTitle {
-    font-size: 6vw;
-    }
-    .insideLabel {
-    font-size: 5vw;
-    }
+input[type=text], select { 
+    outline: 2px solid #8CC084;
+    border: none;
+    border-radius: 20px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-@media only screen and (min-width: 300px) and (max-width:1000px){
-    .mapPopup a.detailsTrigger{
-    color: rgb(23, 161, 58);
-    font-size: .8vw;
-    text-decoration: underline;
-    font-weight: bold;
+#submitReport {
+    background-color: #C1D7AE;
+    border-radius: 20px;
+    padding: 10px;
+    color: white;
+    border: 3px dashed #8CC084;
     cursor: pointer;
+    font-weight: bold;
 }
+
+#submitReport:hover:not(:disabled) {
+    background-color: #8CC084;
 }
+
+.hidden { display: none; }
