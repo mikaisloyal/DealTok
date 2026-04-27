@@ -4,7 +4,7 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; 
+    overflow: hidden;
     background-color: #C1D7AE;
     font-family: sans-serif;
 }
@@ -20,12 +20,12 @@ body {
     padding: 10px;
 }
 
-#map { 
+#map {
     width: 100%;
-    height: 100%; 
-    border-radius: 20px; 
+    height: 100%;
+    border-radius: 20px;
     border: 5px dashed #8CC084;
-    box-sizing: border-box; 
+    box-sizing: border-box;
     z-index: 1;
 }
 
@@ -36,13 +36,13 @@ body {
     color: white;
     font-size: 5vh;
     text-shadow: 0 0 5px #8CC084, 0 0 5px #8CC084, 0 0 5px #8CC084, 0 0 5px #8CC084;
-    border-radius: 25px; 
+    border-radius: 25px;
     border: 5px dashed #8CC084;
     padding: 0 0.8vw;
     top: 20px;
     position: absolute;
     z-index: 999;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 /* --- SIDEBAR LOGIC (THE ZOOM-CONTROL CLEARANCE) --- */
@@ -50,9 +50,9 @@ body {
     display: flex;
     flex-direction: column;
     /* Positions the top of the menu exactly below the Leaflet +/- buttons */
-    top: 90px; 
+    top: 90px;
     left: 0;
-    height: calc(100% - 110px); 
+    height: calc(100% - 110px);
     position: absolute;
     z-index: 1000;
     pointer-events: none; /* Allows map interaction through empty sidebar space */
@@ -74,11 +74,11 @@ body {
     background-color: white;
     color: #8CC084;
     font-size: 1.1rem;
-    border-radius: 25px; 
-    border: 2px solid white; 
+    border-radius: 25px;
+    border: 2px solid white;
     margin: 10px 20px;
-    width: 18vw;       
-    text-align: center;  
+    width: 18vw;
+    text-align: center;
     padding: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -90,16 +90,16 @@ body {
 .selector:hover:not(.active) {
     background-color: #8CC084;
     color: white;
-    border: 2px solid white; 
+    border: 2px solid white;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 29px 0px;
 }
 
 /* --- ACTIVE STATE (NO MORE FULL-SCREEN) --- */
 .selector.active {
     position: relative;
-    width: 22vw; 
+    width: 22vw;
     height: auto;
-    max-height: 80vh; 
+    max-height: 80vh;
     margin: 0 20px;
     background: white;
     cursor: default;
@@ -114,7 +114,7 @@ body {
 #messages {
     flex: 1;
     overflow-y: auto; /* Adds scrollbar for long AI responses */
-    max-height: 35vh; 
+    max-height: 35vh;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -199,7 +199,7 @@ body {
     padding: 20px;
     z-index: 10000;
     box-shadow: rgba(0, 0, 0, 0.5) 0px 7px 29px 0px;
-    display: none; 
+    display: none;
 }
 
 .dealDetails .closeModal {
@@ -215,7 +215,7 @@ body {
 /* --- TOGGLE BUTTON --- */
 #toggle {
     background-color: white;
-    border: 2px solid white; 
+    border: 2px solid white;
     border-radius: 15px;
     color: #8CC084;
     font-size: 2rem;
@@ -236,8 +236,8 @@ body {
 
 /* --- INTERNAL UI ELEMENTS --- */
 .insidePage {
-    display: none; 
-    flex-direction: column; 
+    display: none;
+    flex-direction: column;
     gap: 15px;
 }
 
@@ -257,7 +257,7 @@ body {
     display: block;
 }
 
-input[type=text], select { 
+input[type=text], select {
     outline: 2px solid #8CC084;
     border: none;
     border-radius: 20px;
@@ -281,3 +281,83 @@ input[type=text], select {
 }
 
 .hidden { display: none; }
+
+
+/* AI chatbox styling */
+#aiToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2500;
+    background: #2D3142;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.drawer {
+    position: fixed;
+    right: -400px;
+    bottom: 0;
+    width: 350px;
+    height: 500px;
+    background: white;
+    z-index: 4000;
+    transition: 0.4s ease;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+    border-radius: 20px 20px 0 0;
+    /* this ensures the items stack vertically */
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer.active {
+    right: 20px;
+}
+
+.drawer-header {
+    padding: 15px;
+    background: #8CC084;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Keeps title and X button aligned */
+    border-radius: 20px 20px 0 0;
+}
+
+#chatDisplay {
+    padding: 15px;
+    flex-grow: 1; /* This pushes the input area to the very bottom */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-input-area {
+    padding: 15px;
+    display: flex;
+    gap: 10px; /* Space between input and button */
+    border-top: 1px solid #eee;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.chat-input-area button {
+    background: #8CC084;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}

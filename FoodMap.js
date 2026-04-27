@@ -1,12 +1,12 @@
 //firebase - manages the data of the deals 
 const firebaseConfig = {
-  apiKey: "AIzaSyAhQ4ntF2kH2YVpanHDpRX0ukHoY4gfvgw",
-  authDomain: "dealtok.firebaseapp.com",
-  projectId: "dealtok",
-  storageBucket: "dealtok.firebasestorage.app",
-  messagingSenderId: "101200281210",
-  appId: "1:101200281210:web:d29b65577e761a4dec05c3",
-  measurementId: "G-5MEFG2P4KG"
+    apiKey: "AIzaSyAhQ4ntF2kH2YVpanHDpRX0ukHoY4gfvgw",
+    authDomain: "dealtok.firebaseapp.com",
+    projectId: "dealtok",
+    storageBucket: "dealtok.firebasestorage.app",
+    messagingSenderId: "101200281210",
+    appId: "1:101200281210:web:d29b65577e761a4dec05c3",
+    measurementId: "G-5MEFG2P4KG"
 };
 
 //initialize firebase 
@@ -21,18 +21,18 @@ let currentSearchMarker = null;
 
 //leaflet
 //set limitationsn 
-var sw = L.latLng(40.72614046024686, -74.01010607632027); 
-var ne = L.latLng(40.796611, -73.947889); 
+var sw = L.latLng(40.72614046024686, -74.01010607632027);
+var ne = L.latLng(40.796611, -73.947889);
 
 var bounds = L.latLngBounds(sw, ne);
 
 //Initialize the map
 var map = L.map('map', {
-    maxBounds: bounds,        
-    maxBoundsViscosity: 1.0,   
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
     center: [40.768078508660984, -73.98193797408281],
     zoom: 13,
-    minZoom: 13   
+    minZoom: 13
 }).fitBounds(bounds);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -41,24 +41,24 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 //selection pin color change for report
 const greenIcon = L.divIcon({
-  className: "custom-pin",
-  html: `<svg width="30" height="42" viewBox="0 0 30 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    className: "custom-pin",
+    html: `<svg width="30" height="42" viewBox="0 0 30 42" fill="none" xmlns="http://www.w3.org/2000/svg">
            <path d="M15 0C6.71573 0 0 6.71573 0 15C0 26.25 15 42 15 42C15 42 30 26.25 30 15C30 6.71573 23.2843 0 15 0Z" fill="#8CC084"/>
            <circle cx="15" cy="15" r="6" fill="#C1D7AE"/>
          </svg>`,
-  iconSize: [30, 42],
-  iconAnchor: [14.5, 11]
+    iconSize: [30, 42],
+    iconAnchor: [14.5, 11]
 });
 //pin color change for search bar
 const whiteIcon = L.divIcon({
-  className: "custom-pin-white",
-  html: `<svg width="30" height="42" viewBox="0 0 30 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    className: "custom-pin-white",
+    html: `<svg width="30" height="42" viewBox="0 0 30 42" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 0C6.71573 0 0 6.71573 0 15C0 26.25 15 42 15 42C15 42 30 26.25 30 15C30 6.71573 23.2843 0 15 0Z" fill="#FFFFFF"/>
             <circle cx="15" cy="15" r="6" fill="#C1D7AE"/>
           </svg>`,
-  iconSize: [30, 42],
-  iconAnchor: [15, 42], // Tip of the pin
-  popupAnchor: [0, -42] // Popup appears above the pin
+    iconSize: [30, 42],
+    iconAnchor: [15, 42], // Tip of the pin
+    popupAnchor: [0, -42] // Popup appears above the pin
 });
 //side menu
 const sideMenu = document.getElementById('sideMenu');
@@ -83,7 +83,7 @@ toggle.addEventListener('click',(e) =>{
     if (currentSearchMarker){
         map.removeLayer(currentSearchMarker);
         currentSearchMarker = null; //reset the variable
-        }
+    }
     const cStatus = chatbot.classList.contains('active');
     const fStatus = filters.classList.contains('active');
     const rStatus = report.classList.contains('active');
@@ -94,9 +94,9 @@ toggle.addEventListener('click',(e) =>{
     else {
         sideMenu.classList.toggle('collapsed');
         //Make buttons easy to understand 
-        if (sideMenu.classList.contains('collapsed')) 
+        if (sideMenu.classList.contains('collapsed'))
             toggle.innerHTML = "ⓘ";
-        else 
+        else
             toggle.innerHTML = "⧀";
 
     }
@@ -104,13 +104,13 @@ toggle.addEventListener('click',(e) =>{
     setTimeout(
         () => {
             map.invalidateSize();
-        }, 
-        300); 
+        },
+        300);
 });
 const geocoder = L.Control.Geocoder.nominatim({
     geocodingQueryParams: {
-        viewbox: bounds.toBBoxString(), 
-        bounded: 1 
+        viewbox: bounds.toBBoxString(),
+        bounded: 1
     }
 });
 const searchControl = L.Control.geocoder({
@@ -131,8 +131,8 @@ L.DomEvent.disableClickPropagation(searchBarContainer);
 searchControl.on('markgeocode', function(e){
     const latlng = e.geocode.center;
 
-   if (bounds.contains(latlng)){
-    //remove the old marker if it exists 
+    if (bounds.contains(latlng)){
+        //remove the old marker if it exists
         if (currentSearchMarker) {
             map.removeLayer(currentSearchMarker);
         }
@@ -179,39 +179,39 @@ const reportPage = document.getElementById('reportPage');
 
 // List the IDs of the required inputs
 const requiredFields = [
-  'reportTitle', 
-  'reportItems', 
-  'category', 
+    'reportTitle',
+    'reportItems',
+    'category',
 ];
 const boxAcc = document.getElementById('checkAcc');
 
 function checkForm() {
-  let filled = true;
+    let filled = true;
 
-  requiredFields.forEach(id => {
-    const field = document.getElementById(id);
-    //trim checks there's actually text that's valid
-    if (!field.value || field.value.trim() === ""){
-      filled = false;
-    }
-    if (boxAcc.checked){
-    //checking if drop down has a value
-    const boxAcc = document.getElementById('accDuration');
-    if (!boxAcc.value) filled = false;
-    } else{
-    //what about calendar?
-    const dateRange = document.getElementById('dateRange');
-    if (!dateRange.value || dateRange.value.trim() === ""){
-      filled = false;
-    }
+    requiredFields.forEach(id => {
+        const field = document.getElementById(id);
+        //trim checks there's actually text that's valid
+        if (!field.value || field.value.trim() === ""){
+            filled = false;
+        }
+        if (boxAcc.checked){
+            //checking if drop down has a value
+            const boxAcc = document.getElementById('accDuration');
+            if (!boxAcc.value) filled = false;
+        } else{
+            //what about calendar?
+            const dateRange = document.getElementById('dateRange');
+            if (!dateRange.value || dateRange.value.trim() === ""){
+                filled = false;
+            }
 
-    if (!reportMarker)
-    filled = false;
-  }
-  });
+            if (!reportMarker)
+                filled = false;
+        }
+    });
 
-  //if form is filled button is active
-  submitReport.disabled = !filled;
+    //if form is filled button is active
+    submitReport.disabled = !filled;
 }
 reportPage.addEventListener('input', checkForm);
 reportPage.addEventListener('change', checkForm);
@@ -229,12 +229,12 @@ const submitUserDeal = (e) => {
 
     if (!tempCoords){
         alert("Please click on the map to set the location of the deal first!");
-        return; 
+        return;
     }
 
     if (document.getElementById('category').value === ""){
-    alert("Please select a category for the deal!");
-    return;
+        alert("Please select a category for the deal!");
+        return;
     }
     const ca = document.getElementById('checkAcc').checked;
     let duration;
@@ -244,7 +244,7 @@ const submitUserDeal = (e) => {
     }
     else{
         const datePicker = document.querySelector("#dateRange")._flatpickr;
-        duration = datePicker.selectedDates.length > 0 ? datePicker.selectedDates : "No date set"; 
+        duration = datePicker.selectedDates.length > 0 ? datePicker.selectedDates : "No date set";
     }
 
     const newDeal = {
@@ -257,23 +257,23 @@ const submitUserDeal = (e) => {
         tags: selectedTags,
         lat: tempCoords.lat,
         lng: tempCoords.lng,
-        status: "pending", 
+        status: "pending",
         submittedAt: new Date()
     };
 
     db.collection("pendingDeals").add(newDeal).then(() => {
-            alert("Thanks! We will review this deal shortly.");
-            tempCoords = null;
-            if (reportMarker){
-                map.removeLayer(reportMarker);
-                reportMarker = null;
-            }           
-            document.getElementById('reportTitle').value = "";
-            document.getElementById('reportItems').value = "";
-            document.getElementById('reportUrl').value = "";
-            document.getElementById('category').value = "";
-            goBack(e);
-        });
+        alert("Thanks! We will review this deal shortly.");
+        tempCoords = null;
+        if (reportMarker){
+            map.removeLayer(reportMarker);
+            reportMarker = null;
+        }
+        document.getElementById('reportTitle').value = "";
+        document.getElementById('reportItems').value = "";
+        document.getElementById('reportUrl').value = "";
+        document.getElementById('category').value = "";
+        goBack(e);
+    });
 };
 
 //this lets you open one of the options by hiding the other
@@ -282,7 +282,7 @@ const openOption = (active, hide, hide2) => {
     hide.classList.add('hidden');
     hide2.classList.add('hidden');
 
-     searchContainer.classList.add('hidden');
+    searchContainer.classList.add('hidden');
 }
 //lets you go back
 const goBack = (e) => {
@@ -291,7 +291,7 @@ const goBack = (e) => {
     chatbot.classList.remove('active', 'hidden');
     filters.classList.remove('active', 'hidden');
     report.classList.remove('active', 'hidden');
-     searchContainer.classList.remove('hidden');
+    searchContainer.classList.remove('hidden');
 }
 
 //when you click either it hides it  
@@ -318,13 +318,13 @@ map.on('click', function(e) {
 
         if (!reportMarker) {
             //make marker if it doesn't exist already 
-           reportMarker = L.marker(tempCoords, {draggable: true,icon: greenIcon}).addTo(map);
+            reportMarker = L.marker(tempCoords, {draggable: true,icon: greenIcon}).addTo(map);
             reportMarker.bindPopup("Location Set!").openPopup();
             //let user drag 
             reportMarker.on('dragend', function(event) {
                 tempCoords = event.target.getLatLng();
                 reportMarker.bindPopup("Location Updated!").openPopup();
-                checkForm(); 
+                checkForm();
             });
 
             //set up the right click thing 
@@ -353,11 +353,11 @@ map.on('click', function(e) {
         }
 
         if (currentSearchMarker) {
-        map.removeLayer(currentSearchMarker);
-        currentSearchMarker = null; //teset the variable
+            map.removeLayer(currentSearchMarker);
+            currentSearchMarker = null; //teset the variable
         }
         //check form after map interaction
-        checkForm(); 
+        checkForm();
     }
 });
 
@@ -378,24 +378,24 @@ var soapLayer = L.layerGroup();
 var fork = L.icon({
     iconUrl: 'fork.png',
 
-    iconSize: [75, 75], 
-    iconAnchor: [37, 75], 
-    popupAnchor: [-3, -76] 
+    iconSize: [75, 75],
+    iconAnchor: [37, 75],
+    popupAnchor: [-3, -76]
 });
 
 var shirt = L.icon({
     iconUrl: 'shirt.png',
 
     iconSize:[75, 75],
-    iconAnchor: [37, 75], 
-    popupAnchor: [-3, -76] 
+    iconAnchor: [37, 75],
+    popupAnchor: [-3, -76]
 });
 
 var soap = L.icon({
     iconUrl:'soap.png',
     iconSize:[75, 75],
-    iconAnchor: [37, 75], 
-    popupAnchor: [-3, -76] 
+    iconAnchor: [37, 75],
+    popupAnchor: [-3, -76]
 });
 
 //Utilized when user hovers over the markers 
@@ -403,8 +403,8 @@ var soap = L.icon({
 var forkHover = L.icon({
     iconUrl: 'forkHover.png',
 
-    iconSize: [112, 112], 
-    iconAnchor: [56, 112], 
+    iconSize: [112, 112],
+    iconAnchor: [56, 112],
     popupAnchor: [0, -112]
 });
 
@@ -426,7 +426,7 @@ var soapHover = L.icon({
 
 //basic marker making function
 const addMarker = (lat, lng, image, details, groups) => {
-    var marker = L.marker([lat, lng], {icon: image}); 
+    var marker = L.marker([lat, lng], {icon: image});
     //if the image is fork = forkHover else if shirt else if soap
     let hover;
     const url = image.options.iconUrl;
@@ -484,23 +484,23 @@ const showLayer = (id, layer) => {
     const foodIDs = ['foodCheck','veggieCheck', 'veganCheck', 'halalCheck', 'kosherCheck'];
     const updateMap = () => {
         //is it checked and does it belong to food
-    if (checkbox.checked && foodIDs.includes(id)){
-        //essentially it filters food i g
-        //the mild issue is that halal food and vegan food say isn't exclusive to one another and can intersect
-        //although technically the multiple layers can solve this issue 
-        //it could be annoying to the user 
-        //at the same time, some tags should not interact with one another
+        if (checkbox.checked && foodIDs.includes(id)){
+            //essentially it filters food i g
+            //the mild issue is that halal food and vegan food say isn't exclusive to one another and can intersect
+            //although technically the multiple layers can solve this issue
+            //it could be annoying to the user
+            //at the same time, some tags should not interact with one another
             foodIDs.forEach(otherId => {
                 if (otherId !== id) {
                     const otherCheck = document.getElementById(otherId);
                     const otherLayer = layers[otherId];
                     otherCheck.checked = false;
-                    if (otherLayer) 
+                    if (otherLayer)
                         map.removeLayer(otherLayer);
                 }
             });
-    };
-    if (checkbox.checked) {
+        };
+        if (checkbox.checked) {
             map.addLayer(layer);
         } else {
             map.removeLayer(layer);
@@ -515,7 +515,7 @@ const showLayer = (id, layer) => {
 db.collection("deals").onSnapshot((snapshot) =>{
     snapshot.docChanges().forEach((change) =>{
         const data = change.doc.data();
-        
+
         if (change.type === "added"){
             let iconType;
             if (data.category === 'clothing'){
@@ -529,7 +529,7 @@ db.collection("deals").onSnapshot((snapshot) =>{
             const targetLayers = data.tags.map(tagId => layers[tagId]);
             addMarker(data.lat, data.lng, iconType, data, targetLayers);
         }
-        
+
     });
 });
 
@@ -550,11 +550,11 @@ const modalItems = document.getElementById('modalItems');
 const modalExternalLink = document.getElementById('modalExternalLink');
 
 const openDealModal = (data) => {
-   
-   modalTitle.textContent = data.header;
-   modalDuration.textContent = data.expirationDate || "No expiration listed";
-   modalItems.textContent = data.items;
-   modalExternalLink.href = data.url;
+
+    modalTitle.textContent = data.header;
+    modalDuration.textContent = data.expirationDate || "No expiration listed";
+    modalItems.textContent = data.items;
+    modalExternalLink.href = data.url;
 
     map.closePopup();
     modal.style.display = "block";
@@ -589,20 +589,20 @@ async function askChatbot(userPrompt) {
     try {
         // Fix 1: Use the full path for the model
         const result = await ai.models.generateContent({
-    // Use the exact string from your console log
-    model: "models/gemini-2.5-flash", 
-    contents: [{ 
-        role: "user", 
-        parts: [{ text: userPrompt }] 
-    }]
-});
+            // Use the exact string from your console log
+            model: "models/gemini-2.5-flash",
+            contents: [{
+                role: "user",
+                parts: [{ text: userPrompt }]
+            }]
+        });
 
         // Fix 2: Navigate the specific response tree for this SDK version
         // Based on your previous logs, this is the most likely path:
         if (result.candidates && result.candidates[0].content) {
             return result.candidates[0].content.parts[0].text;
         }
-        
+
         return "I found an answer, but I can't read it. Check the console!";
 
     } catch (error) {
@@ -623,7 +623,7 @@ function appendMessage(role, text) {
     msgDiv.className = role === 'user' ? 'user-msg' : 'bot-msg';
     msgDiv.innerText = text;
     messageArea.appendChild(msgDiv);
-    
+
     // Auto-scroll to the bottom
     messageArea.scrollTop = messageArea.scrollHeight;
 }
@@ -644,7 +644,7 @@ async function handleChat() {
 
     // 3. Get AI Response
     const aiResponse = await askChatbot(prompt);
-    
+
     // 4. Replace loading text with real response
     loadingDiv.innerText = aiResponse;
 }
@@ -656,3 +656,17 @@ sendBtn.addEventListener('click', handleChat);
 userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleChat();
 });
+
+function toggleChat() {
+    document.getElementById('chatDrawer').classList.toggle('active');
+}
+
+async function askGemini() {
+    const input = document.getElementById('chatInput');
+    const display = document.getElementById('chatDisplay');
+    if(!input.value) return;
+
+    display.innerHTML += `<div><b>You:</b> ${input.value}</div>`;
+    display.innerHTML += `<div style="color:#8CC084;"><b>Bot:</b> (Connecting to AI...)</div>`;
+    input.value = '';
+}
